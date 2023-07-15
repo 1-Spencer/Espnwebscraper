@@ -17,22 +17,22 @@ class TestMethod:
         chrome_options.add_experimental_option("detach", True)
         coding = SeleniumScraper(driver)
         listofdivisions = coding.getteamsdiv()
-        for x in listofdivisions:
-            print(x)
+        
 
-        # for i, x in enumerate(listofdivisions):
-        #     divisions = x[0]
-        #     x.remove(x[0])
-        #     print(x[i], i)
-        #     coding.click_button(x[i])
+        for i, x in enumerate(listofdivisions):
+            divisions = x[0]
+            x.remove(x[0])
+            for y in x:
+                
+                coding.click_button(y)
 
-        #     coding.createfolder(divisions)
-        #     playerlist = coding.getListOfPlayers(x[i])
-        #     coding.createcsv(playerlist, "./divisions/" + divisions + "/" +
-        #                      x[i] + '.csv')
-        #     time.sleep(5)
+                coding.createfolder(divisions)
+                playerlist = coding.getListOfPlayers(y)
+                coding.createcsv(playerlist, "./divisions/" + divisions + "/" +
+                                y + '.csv')
+                time.sleep(5)
 
-        # seperatedlist = coding.seperateyearmakemodel(listOfListCar)
+        
         driver.quit()
 
 
@@ -95,29 +95,7 @@ class SeleniumScraper:
             teamslistlist.append(tempteam)
         return teamslistlist
 
-    # def click_drop_down_menu(self):
-    #     dropdown = self.driver.find_element(By.ID,"locationBox")
-    #     dropdown.click()
-
-    # def select_option_values(self):
-    #     oppgroup = self.driver.find_element(By.XPATH, "//optgroup[@label='Alabama']")
-    #     opp = oppgroup.find_element(By.XPATH, "//option[@value='1223']")
-    #     opp.click()
-    #     time.sleep(2)
-
-    # def seperateyearmakemodel(self, list):
-    #     cardeets = list
-    #     yearmakemodel = []
-    #     #cardeets is the list contains the list of each cars details
-    #     #element is the individual car details
-    #     for i,element in enumerate(cardeets):
-    #         yearmakemodel.append(element[0].split(' '))
-    #         element.remove(element[0])
-    #         for i,field in enumerate(yearmakemodel[i]):
-    #             element.insert(i,field)
-    #     for element in cardeets:
-    #         print(element, "2")
-    #     return cardeets
+    
 
     def createcsv(self, list, name):
         with open(name, 'w', newline='') as file:
@@ -132,4 +110,4 @@ class SeleniumScraper:
 run = TestMethod()
 run.test()
 
-# click one the options using value
+
