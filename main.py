@@ -16,20 +16,25 @@ class TestMethod:
         chrome_options = Options()
         chrome_options.add_experimental_option("detach", True)
         coding = SeleniumScraper(driver)
-        listofdivisions = coding.getteamsdiv()
         
+        # coding.click_button("Charlotte")
+        # playerslist = coding.getListOfPlayers("Charlotte")
+        # for x in playerslist:
+        #     print(x)
+        # coding.createcsv(playerslist,"Charlotte.csv")
 
+        listofdivisions = coding.getteamsdiv()
         for i, x in enumerate(listofdivisions):
             divisions = x[0]
             x.remove(x[0])
-            for y in x:
+            for int, y in enumerate(x):
                 
                 coding.click_button(y)
-
                 coding.createfolder(divisions)
                 playerlist = coding.getListOfPlayers(y)
                 coding.createcsv(playerlist, "./divisions/" + divisions + "/" +
-                                y + '.csv')
+                                y + '.csv', divisions, y)
+                
                 time.sleep(5)
 
         
@@ -37,12 +42,7 @@ class TestMethod:
 
 
 class SeleniumScraper:
-    # xpath for each element
-    driver = ""
-    listofcars = "//*[@id='pypvi_results']"
-    car_card_wrappers = "//*[@class='pypvi_resultRow']"
-    car_detail_wrapper = "//*[@class='pypvi_details text--small']"
-    car_name = "//*[@class='pypvi_ymm']"
+    
 
     def __init__(self, driver):
         self.driver = driver
@@ -68,10 +68,12 @@ class SeleniumScraper:
         print(len(allplayerlist))
         playerstring = []
         for element in playerelements:
+            
             playerstring.append(element.text)
         # for elements in playerstring:
         #     print(playerstring)
         self.driver.back()
+
 
         return playerstring
 
@@ -97,14 +99,21 @@ class SeleniumScraper:
 
     
 
-    def createcsv(self, list, name):
+    def createcsv(self, list, name, divisions, team):
         with open(name, 'w', newline='') as file:
             writer = csv.writer(file)
-            field = ["name", "position", "height",
+            field = ["firstName", "lastName","position", "height",
                      "weight", "class", "birthplace"]
 
             for element in list:
-                writer.writerow(element.split())
+                parts = element.split()
+                parts.insert(3, divisions)
+                parts.insert(4, team)
+                lastName = parts[1]
+                if lastName[-1].isdigit():  # Check if the last character of the last name is a digit
+                    lastName = lastName.rstrip('0123456789')
+                parts[1] = lastName
+                writer.writerow(parts)
 
 
 run = TestMethod()
