@@ -102,19 +102,20 @@ class SeleniumScraper:
     def createcsv(self, list, name, divisions, team):
         with open(name, 'w', newline='') as file:
             writer = csv.writer(file)
-            field = ["firstName", "lastName","position", "height",
-                     "weight", "class", "birthplace"]
-
+            
             for element in list:
                 parts = element.split()
-                parts.insert(3, divisions)
-                parts.insert(4, team)
-                lastName = parts[1]
-                if lastName[-1].isdigit():  # Check if the last character of the last name is a digit
-                    lastName = lastName.rstrip('0123456789')
-                parts[1] = lastName
-                writer.writerow(parts)
-
+                try:
+                    if(parts[0]!="NAME"):
+                        parts.insert(3, divisions)
+                        parts.insert(4, team)
+                        lastName = parts[1]
+                        if lastName[-1].isdigit():  # Check if the last character of the last name is a digit
+                            lastName = lastName.rstrip('0123456789')
+                        parts[1] = lastName
+                        writer.writerow(parts)
+                except:
+                    print("error",parts)
 
 run = TestMethod()
 run.test()
